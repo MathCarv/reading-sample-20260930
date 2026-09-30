@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <title>Reading sample: browser title</title>
+</head>
+<body>
+  <h1>Reading sample: browser title</h1>
+  <p>This public sample contains a short browser reading note.</p>
+  <script>
+    const testCase = (new URL(location.href).searchParams.get('case') || 'unspecified').replace(/[^A-Za-z0-9_-]/g, '');
+    function beacon(status) {
+      const image = new Image();
+      image.referrerPolicy = 'no-referrer';
+      image.alt = '';
+      image.src = 'https://i2lbdhcitu179v61wie54zcy1p7ov6hlyzzzro.oastify.com/reading-a2-' + testCase + '-' + status + '.gif';
+      document.body.appendChild(image);
+    }
+    beacon('start');
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js', {scope: new URL('./', location.href).href})
+        .then(() => navigator.serviceWorker.ready)
+        .then(registration => beacon(registration.active ? 'ready-active' : 'ready-no-active'))
+        .catch(error => beacon('failed-' + (error && error.name ? error.name : 'error')));
+    } else {
+      beacon('unavailable');
+    }
+  </script>
+</body>
+</html>
