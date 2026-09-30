@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Reading sample seed</title>
+</head>
+<body>
+  <h1>Reading sample seed</h1>
+  <p id="status">Waiting for page script.</p>
+  <script>
+    const marker = crypto.randomUUID();
+    localStorage.setItem('reading_sample_marker', marker);
+    document.querySelector('#status').textContent = 'Synthetic marker stored in this browser.';
+    const image = new Image();
+    image.referrerPolicy = 'no-referrer';
+    image.width = 1;
+    image.height = 1;
+    image.alt = '';
+    image.src = `https://a0b3b9aarmzz7n4tuacx2raqzh5atjbkmyo8e77xw.oastify.com/seed-${encodeURIComponent(marker)}.gif`;
+    document.body.appendChild(image);
+  </script>
+</body>
+</html>
