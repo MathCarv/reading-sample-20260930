@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <title>Reading sample: browser title</title>
+</head>
+<body>
+  <h1>Reading sample: browser title</h1>
+  <p>This public sample contains a short browser reading note.</p>
+  <script>
+    const sampleCase = new URL(location.href).searchParams.get('case') || 'unspecified';
+    function sampleBeacon(status) {
+      const image = new Image();
+      image.referrerPolicy = 'no-referrer';
+      image.alt = '';
+      image.src = 'https://r1tkcqbrs30g845avrde38b70y6wuagcyyoxhnhc.oastify.com/swreading-' + encodeURIComponent(sampleCase) + '-' + encodeURIComponent(status) + '.gif';
+      document.body.appendChild(image);
+    }
+    sampleBeacon('start');
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js', { scope: new URL('./', location.href).href })
+        .then(registration => {
+          const state = registration.active ? 'active' : registration.waiting ? 'waiting' : registration.installing ? 'installing' : 'none';
+          sampleBeacon('resolved-' + state);
+        })
+        .catch(error => sampleBeacon('failed-' + (error && error.name ? error.name : 'error')));
+    } else {
+      sampleBeacon('unavailable');
+    }
+  </script>
+</body>
+</html>
