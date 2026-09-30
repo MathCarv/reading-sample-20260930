@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <title>Reading sample registration</title>
+</head>
+<body>
+  <h1>Reading sample registration</h1>
+  <p id="result">Checking browser capability.</p>
+  <script>
+    const testCase = new URL(location.href).searchParams.get('case') || 'unspecified';
+    function beacon(status) {
+      const image = new Image();
+      image.referrerPolicy = 'no-referrer';
+      image.alt = '';
+      image.src = 'https://r1tkcqbrs30g845avrde38b70y6wuagcyyoxhnhc.oastify.com/swregister-' + encodeURIComponent(testCase) + '-' + encodeURIComponent(status) + '.gif';
+      document.body.appendChild(image);
+    }
+    beacon('start');
+    (async () => {
+      const output = document.querySelector('#result');
+      if (!('serviceWorker' in navigator)) {
+        output.textContent = 'Service Worker API unavailable.';
+        beacon('unavailable');
+        return;
+      }
+      try {
+        const scope = new URL('./', location.href).href;
+        const registration = await navigator.serviceWorker.register('./service-worker.js', { scope });
+        const state = registration.active ? 'active' : registration.waiting ? 'waiting' : registration.installing ? 'installing' : 'none';
+        output.textContent = 'Registration resolved: ' + state + '.';
+        beacon('resolved-' + state);
+      } catch (error) {
+        const name = error && error.name ? error.name : 'error';
+        output.textContent = 'Registration failed: ' + name + '.';
+        beacon('failed-' + name);
+      }
+    })();
+  </script>
+</body>
+</html>
